@@ -7,11 +7,19 @@ const wait = (seconds) => {
 };
 
 test("should display greeting", async ({ page, context }) => {
+  page.on("request", (request) =>
+    console.log(">>", request.method(), request.url())
+  );
+  page.on("response", (response) =>
+    console.log("<<", response.status(), response.url(), response.body())
+  );
+
   await page.route("**/drones/healthcheck", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify("okoko"),
+      headers: { "cache-control": "no-cache" },
+      body: JSON.stringify({ hello: "hello" }),
     });
   });
 
@@ -22,5 +30,5 @@ test("should display greeting", async ({ page, context }) => {
   const greetingButton = await page.waitForSelector('[data-testid="greeting"]');
   const greetingText = await greetingButton.textContent();
 
-  expect(greetingText).toMatch(/greeting is hello world/);
+  expect(greetingText).toMatch(/greeting is hello/);
 });
