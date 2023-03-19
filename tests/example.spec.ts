@@ -1,25 +1,11 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, firefox } from "@playwright/test";
 
-test("has title", async ({ page }) => {
-  await page.route("**/drones", async (route) => {
-    await route.fulfill({ status: 200, body: "testtest123" });
-  });
+test("should display greeting", async ({ page, context }) => {
+  page = await context.newPage();
+  await page.goto("http://localhost:5173/");
 
-  await page.goto("http://127.0.0.1:5173");
-  setTimeout(async () => {
-    const button = await page.$('button:text("greeting is hello world")');
+  const greetingButton = await page.waitForSelector('[data-testid="greeting"]');
+  const greetingText = await greetingButton.textContent();
 
-    expect(button).not.toBeFalsy();
-  }, 5000);
-  await page.screenshot({ path: "screenshot.png" });
+  expect(greetingText).toMatch(/greeting is .+/);
 });
-
-// test('get started link', async ({ page }) => {
-//   await page.goto('https://playwright.dev/');
-
-//   // Click the get started link.
-//   await page.getByRole('link', { name: 'Get started' }).click();
-
-//   // Expects the URL to contain intro.
-//   await expect(page).toHaveURL(/.*intro/);
-// });
