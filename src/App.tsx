@@ -23,7 +23,7 @@ function App() {
         >
           count is {count}
         </button>
-        <button data-testid="greeting">test{greeting}</button>
+        <button data-testid="greeting">greeting is {greeting}</button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
