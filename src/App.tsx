@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   const [count, setCount] = useState(0);
   const [greeting, setGreeting] = useState<{ hello: string }>({ hello: "" });
-  console.log("🚀 ~ file: App.tsx:7 ~ App ~ greeting:", greeting);
+  console.log("🚀 ~ file: App.tsx:7 ~ App ~ greeting.hello:", greeting.hello);
 
   React.useEffect(() => {
     fetch("http://localhost:3000/drones/healthcheck")
@@ -13,7 +13,14 @@ function App() {
         return res.json();
       })
       .then((data) => {
-        console.log("🚀 ~ file: App.tsx:16 ~ .then ~ data:", data);
+        Object.entries(data).forEach((entries) => {
+          entries.forEach((entry) => {
+            console.log(
+              "🚀 ~ file: App.tsx:18 ~ entries.forEach ~ entry:",
+              entry
+            );
+          });
+        });
         setGreeting(data);
       });
   }, [count]);

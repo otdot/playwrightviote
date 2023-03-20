@@ -14,12 +14,14 @@ test("should display greeting", async ({ page, context }) => {
     console.log("<<", response.status(), response.url(), response.body())
   );
 
+  page.on("console", (msg) => console.log(msg.text()));
+
   await page.route("**/drones/healthcheck", (route) => {
     route.fulfill({
       status: 200,
       contentType: "application/json",
       headers: { "cache-control": "no-cache" },
-      body: JSON.stringify({ hello: "hello" }),
+      body: JSON.stringify({ hello: "hello", test: "test" }),
     });
   });
 
